@@ -1,4 +1,6 @@
-﻿using API.Dominio.Model;
+﻿using System.Threading.Tasks;
+using API.Dominio.Model;
+using API.Dominio.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -7,22 +9,27 @@ namespace API.Controllers
     [ApiController]
     public class UsuarioController : ControllerBase
     {
-        [HttpPost("login")]
-        public LoginResponse Login([FromBody] Login login)
+        private readonly IUsuarioService _usuarioServices;
+
+        public UsuarioController(IUsuarioService usuarioService)
         {
-            if (login.Senha == "1234")
-            {
-                return new LoginResponse { Logado = true };
-            }
-            else
-            {
-                return new LoginResponse { Logado = false };
-            }
+            _usuarioServices = usuarioService;
         }
-        [HttpPost("cadastro")]
-        public CadastroResponse Cadastro([FromBody] Cadastro cadastro)
+
+        [HttpPost("login")]
+        public async Task<LoginResponse> Login([FromBody] Login login)
         {
-            return new CadastroResponse { Id = 1 };
+            var retornoLogin = await _usuarioServices.Login(login);
+
+            return retornoLogin;
+        }
+
+        [HttpPost("cadastro")]
+        public async Task<CadastroResponse> Cadastro([FromBody] Cadastro cadastro)
+        {
+            var retornoCadastro = await _usuarioServices.Cadastrar(cadastro);
+
+            return retornoCadastro;
         }
     }
 }
