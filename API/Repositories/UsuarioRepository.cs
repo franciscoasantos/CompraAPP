@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
 using API.Services;
@@ -17,15 +14,15 @@ namespace API.Repositories
         {
             _sessao = sessao;
         }
-        
-        public Task<CadastroResponse> Cadastrar(Cadastro cadastro)
+
+        public async Task<CadastroResponse> Cadastrar(Cadastro cadastro)
         {
-            throw new NotImplementedException();
+            return await _sessao.Connection.QueryFirstAsync<CadastroResponse>("select 1 Id");
         }
 
-        public Task<LoginResponse> Login(Login login)
+        public async Task<LoginResponse> Login(Login login)
         {
-            throw new NotImplementedException();
+            return await _sessao.Connection.QueryFirstAsync<LoginResponse>("select 'true' Logado");
         }
     }
 }

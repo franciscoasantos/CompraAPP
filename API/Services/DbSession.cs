@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace API.Services
 {
@@ -10,9 +10,9 @@ namespace API.Services
         public IDbConnection Connection { get; }
         public IDbTransaction Transaction { get; set; }
 
-        public DbSession()
+        public DbSession(IConfiguration configuration)
         {
-            Connection = new SqlConnection(ConfigurationManager.AppSettings["connectionString"]);
+            Connection = new SqlConnection(configuration.GetSection("Configuracoes:stringConexao").Value);
             Connection.Open();
         }
 
