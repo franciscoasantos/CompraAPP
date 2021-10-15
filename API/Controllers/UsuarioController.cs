@@ -17,19 +17,24 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<LoginResponse> Login([FromBody] Login login)
+        public async Task<IActionResult> Login([FromBody] Login login)
         {
             var retornoLogin = await _usuarioServices.Login(login);
 
-            return retornoLogin;
+            return Ok(retornoLogin);
         }
 
         [HttpPost("cadastro")]
-        public async Task<CadastroResponse> Cadastro([FromBody] Cadastro cadastro)
+        public async Task<IActionResult> Cadastro([FromBody] Cadastro cadastro)
         {
             var retornoCadastro = await _usuarioServices.Cadastrar(cadastro);
 
-            return retornoCadastro;
+            if (retornoCadastro.Id == -1)
+            {
+                return Conflict(retornoCadastro);
+            }
+
+            return Created("", retornoCadastro);
         }
     }
 }

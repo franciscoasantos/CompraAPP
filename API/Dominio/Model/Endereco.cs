@@ -9,5 +9,10 @@
         public string Estado { get; set; }
         public string Complemento { get; set; }
         public string PontoDeReferencia { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Logradouro}, {Numero}, {Complemento}, {Bairro} - {Cidade}/{Estado} ({PontoDeReferencia})";
+        }
     }
 }
