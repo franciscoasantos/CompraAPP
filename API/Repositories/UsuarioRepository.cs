@@ -65,5 +65,19 @@ namespace API.Repositories
 
             return await _sessao.Connection.QueryFirstAsync<Login>(sb.ToString(), parameters);
         }
+
+        public async Task<int> ValidarUsuarioExistente(string cpf)
+        {
+            StringBuilder sb = new();
+
+            sb.AppendLine(" SELECT COUNT(*) qtd                                     ");
+            sb.AppendLine(" FROM users                                              ");
+            sb.AppendLine(" WHERE cpf = @Cpf                                        ");
+
+            var template = new { Cpf = cpf };
+            var parameters = new DynamicParameters(template);
+
+            return await _sessao.Connection.QueryFirstAsync<int>(sb.ToString(), parameters);
+        }
     }
 }

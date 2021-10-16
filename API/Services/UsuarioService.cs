@@ -25,6 +25,10 @@ namespace API.Services
                 //Algoritomo para criptografar senha
                 cadastro.Senha = _criptografiaService.Criptografar(cadastro.Senha);
 
+                //Validar se usuário já existe
+                if (await _usuarioRepository.ValidarUsuarioExistente(cadastro.Cpf) > 0)
+                    throw new Exception("Já existe um usuário cadastrado com os parâmetros informados.");
+
                 var retorno = await _usuarioRepository.CadastrarUsuario(cadastro);
                 await _usuarioRepository.CadastrarSenha(retorno.IdUsuario, cadastro.Senha);
 
@@ -32,14 +36,6 @@ namespace API.Services
                 retorno.Detalhe = "Usuário criado com sucesso!";
 
                 return retorno;
-            }
-            catch (SqlException ex)
-            {
-                //Todo Enum para codigos de erro SQL
-                if (ex.Number == 2627)
-                    return new CadastroResponse { IdUsuario = -1, Detalhe = "Já existe um usuário cadastrado com os parâmetros informados." };
-                else
-                    return new CadastroResponse { IdUsuario = -1, Detalhe = ex.Message };
             }
             catch (Exception ex)
             {

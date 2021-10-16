@@ -8,5 +8,6 @@ namespace API.Dominio.Repositories
         Task<Login> BuscarDadosLogin(Login login);
         Task<CadastroResponse> CadastrarUsuario(Cadastro cadastro);
         Task<int> CadastrarSenha(long idUsuario, string senha);
+        Task<int> ValidarUsuarioExistente(string cpf);
     }
 }
