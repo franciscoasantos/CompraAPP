@@ -10,10 +10,12 @@ namespace API.Services
     public class UsuarioService : IUsuarioService
     {
         private readonly IUsuarioRepository _usuarioRepository;
+        private readonly ICriptografiaService _criptografiaService;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository)
+        public UsuarioService(IUsuarioRepository usuarioRepository, ICriptografiaService criptografiaService )
         {
             _usuarioRepository = usuarioRepository;
+            _criptografiaService = criptografiaService;
         }
 
         public async Task<CadastroResponse> Cadastrar(Cadastro cadastro)
@@ -21,8 +23,7 @@ namespace API.Services
             try
             {
                 //Algoritomo para criptografar senha
-                var criptografia = new CriptografiaService();
-                cadastro.Senha = criptografia.Criptografar(cadastro.Senha);
+                cadastro.Senha = _criptografiaService.Criptografar(cadastro.Senha);
 
                 var retorno = await _usuarioRepository.CadastrarUsuario(cadastro);
                 await _usuarioRepository.CadastrarSenha(retorno.IdUsuario, cadastro.Senha);
@@ -50,10 +51,9 @@ namespace API.Services
         {
             try
             {
-                var criptografia = new CriptografiaService();
                 var retorno = await _usuarioRepository.BuscarDadosLogin(login);
 
-                if (retorno != null && login.Senha == criptografia.Descriptografar(retorno.Senha))
+                if (retorno != null && login.Senha == _criptografiaService.Descriptografar(retorno.Senha))
                     return new LoginResponse { Logado = true, Detalhe = "Login efetuado com sucesso!" };
 
                 return new LoginResponse { Logado = false, Detalhe = "Usuário ou senha inválidos!" };

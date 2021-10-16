@@ -32,6 +32,7 @@ namespace API
 
             services.AddScoped<DbSession>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<ICriptografiaService, CriptografiaService>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioService, UsuarioService>();
         }

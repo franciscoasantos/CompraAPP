@@ -34,8 +34,8 @@ namespace API.Controllers
 
             if (retornoCadastro.IdUsuario == -1)
                 return Conflict(retornoCadastro);
-
-            return Created("", retornoCadastro);
+            else
+                return Created("", retornoCadastro);
         }
     }
 }
