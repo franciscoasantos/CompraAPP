@@ -34,10 +34,10 @@ namespace API.Controllers
         {
             var retornoCadastro = await _usuarioServices.Cadastrar(cadastro);
 
-            if (retornoCadastro.IdUsuario == -1)
-                return Conflict(retornoCadastro);
-            else
+            if (retornoCadastro.Sucesso)
                 return Created("", retornoCadastro);
+            else
+                return UnprocessableEntity(retornoCadastro);
         }
     }
 }

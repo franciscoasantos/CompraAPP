@@ -12,6 +12,7 @@
     public class CadastroResponse
     {
         public long IdUsuario { get; set; }
+        public bool Sucesso { get; set; }
         public string Detalhe { get; set; }
     }
 }

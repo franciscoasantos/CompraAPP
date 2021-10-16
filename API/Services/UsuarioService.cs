@@ -32,13 +32,13 @@ namespace API.Services
                 var retorno = await _usuarioRepository.CadastrarUsuario(cadastro);
                 await _usuarioRepository.CadastrarSenha(retorno.IdUsuario, cadastro.Senha);
 
-                retorno.Detalhe = "Usuário criado com sucesso!";
+                retorno.Sucesso = true;
 
                 return retorno;
             }
             catch (Exception ex)
             {
-                return new CadastroResponse { IdUsuario = -1, Detalhe = ex.Message };
+                return new CadastroResponse { Sucesso = false, Detalhe = ex.Message };
             }
         }
     }
