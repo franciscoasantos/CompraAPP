@@ -3,8 +3,8 @@ using API.Dominio.Model;
 
 namespace API.Dominio.Services
 {
-    public interface IUsuarioService
+    public interface ILoginService
     {
-        Task<CadastroResponse> Cadastrar(Cadastro cadastro);
+        Task<LoginResponse> Login(Login login);
     }
 }

@@ -10,16 +10,18 @@ namespace API.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly IUsuarioService _usuarioServices;
+        private readonly ILoginService _loginService;
 
-        public UsuarioController(IUsuarioService usuarioService)
+        public UsuarioController(IUsuarioService usuarioService, ILoginService loginService)
         {
             _usuarioServices = usuarioService;
+            _loginService = loginService;
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
-            var retornoLogin = await _usuarioServices.Login(login);
+            var retornoLogin = await _loginService.Login(login);
 
             if (retornoLogin.Logado)
                 return Ok(retornoLogin);

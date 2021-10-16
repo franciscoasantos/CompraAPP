@@ -35,6 +35,8 @@ namespace API
             services.AddScoped<ICriptografiaService, CriptografiaService>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<ILoginRepository, LoginRepository>();
+            services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IAplicativoRepository, AplicativoRepository>();
             services.AddScoped<IAplicativoService, AplicativoService>();
         }

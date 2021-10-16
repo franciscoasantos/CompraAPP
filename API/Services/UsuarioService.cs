@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
@@ -12,7 +11,7 @@ namespace API.Services
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly ICriptografiaService _criptografiaService;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository, ICriptografiaService criptografiaService )
+        public UsuarioService(IUsuarioRepository usuarioRepository, ICriptografiaService criptografiaService)
         {
             _usuarioRepository = usuarioRepository;
             _criptografiaService = criptografiaService;
@@ -40,23 +39,6 @@ namespace API.Services
             catch (Exception ex)
             {
                 return new CadastroResponse { IdUsuario = -1, Detalhe = ex.Message };
-            }
-        }
-
-        public async Task<LoginResponse> Login(Login login)
-        {
-            try
-            {
-                var retorno = await _usuarioRepository.BuscarDadosLogin(login);
-
-                if (retorno != null && login.Senha == _criptografiaService.Descriptografar(retorno.Senha))
-                    return new LoginResponse { Logado = true, Detalhe = "Login efetuado com sucesso!" };
-
-                return new LoginResponse { Logado = false, Detalhe = "Usuário ou senha inválidos!" };
-            }
-            catch (Exception ex)
-            {
-                return new LoginResponse { Logado = false, Detalhe = ex.Message };
             }
         }
     }
