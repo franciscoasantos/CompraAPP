@@ -21,7 +21,10 @@ namespace API.Controllers
         {
             var retornoLogin = await _usuarioServices.Login(login);
 
-            return Ok(retornoLogin);
+            if (retornoLogin.Logado)
+                return Ok(retornoLogin);
+            else
+                return Unauthorized(retornoLogin);
         }
 
         [HttpPost("cadastro")]
@@ -30,9 +33,7 @@ namespace API.Controllers
             var retornoCadastro = await _usuarioServices.Cadastrar(cadastro);
 
             if (retornoCadastro.IdUsuario == -1)
-            {
                 return Conflict(retornoCadastro);
-            }
 
             return Created("", retornoCadastro);
         }

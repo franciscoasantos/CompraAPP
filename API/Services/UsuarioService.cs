@@ -48,7 +48,20 @@ namespace API.Services
 
         public async Task<LoginResponse> Login(Login login)
         {
-            return await _usuarioRepository.Login(login);
+            try
+            {
+                var criptografia = new CriptografiaService();
+                var retorno = await _usuarioRepository.BuscarDadosLogin(login);
+
+                if (retorno != null && login.Senha == criptografia.Descriptografar(retorno.Senha))
+                    return new LoginResponse { Logado = true, Detalhe = "Login efetuado com sucesso!" };
+
+                return new LoginResponse { Logado = false, Detalhe = "Usuário ou senha inválidos!" };
+            }
+            catch (Exception ex)
+            {
+                return new LoginResponse { Logado = false, Detalhe = ex.Message };
+            }
         }
     }
 }

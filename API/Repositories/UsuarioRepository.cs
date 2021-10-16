@@ -50,9 +50,20 @@ namespace API.Repositories
             return await _sessao.Connection.ExecuteAsync(sb.ToString(), parameters);
         }
 
-        public async Task<LoginResponse> Login(Login login)
+        public async Task<Login> BuscarDadosLogin(Login login)
         {
-            return await _sessao.Connection.QueryFirstAsync<LoginResponse>("select 'true' Logado");
+            StringBuilder sb = new();
+
+            sb.AppendLine(" SELECT cpf Cpf                                          ");
+            sb.AppendLine("     ,senha Senha                                        ");
+            sb.AppendLine(" FROM users                                              ");
+            sb.AppendLine(" INNER JOIN senhas ON users.idUsuario = senhas.idUsuario ");
+            sb.AppendLine(" WHERE cpf = @Cpf                                        ");
+
+            var template = new { Cpf = login.Usuario };
+            var parameters = new DynamicParameters(template);
+
+            return await _sessao.Connection.QueryFirstAsync<Login>(sb.ToString(), parameters);
         }
     }
 }
