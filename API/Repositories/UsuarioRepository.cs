@@ -27,9 +27,10 @@ namespace API.Repositories
             sb.AppendLine("     ,@Cpf                           ");
             sb.AppendLine("     ,@DataNascimento                ");
             sb.AppendLine("     ,@Sexo                          ");
-            sb.AppendLine("     ,@Endereco)                     ");
+            sb.AppendLine("     ,@Endereco                      ");
+            sb.AppendLine("     ,@Senha)                        ");
 
-            var template = new { cadastro.Nome, cadastro.Cpf, cadastro.DataNascimento, cadastro.Sexo, Endereco = cadastro.Endereco.ToString() };
+            var template = new { cadastro.Nome, cadastro.Cpf, cadastro.DataNascimento, cadastro.Sexo, Endereco = cadastro.Endereco.ToString(), cadastro.Senha };
 
             var parameters = new DynamicParameters(template);
 

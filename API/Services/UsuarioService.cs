@@ -1,4 +1,5 @@
-﻿using System.Data.SqlClient;
+﻿using System;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
@@ -19,7 +20,12 @@ namespace API.Services
         {
             try
             {
+                //Algoritomo para criptografar senha
+                var criptografia = new CriptografiaService();
+                cadastro.Senha = criptografia.Criptografar(cadastro.Senha);
+
                 var retorno = await _usuarioRepository.Cadastrar(cadastro);
+                //Todo criar Enum para mensagens do sistema
                 retorno.Detalhe = "Usuário criado com sucesso!";
 
                 return retorno;
@@ -31,6 +37,10 @@ namespace API.Services
                     return new CadastroResponse { Id = -1, Detalhe = "Já existe um usuário cadastrado com os parâmetros informados." };
                 else
                     return new CadastroResponse { Id = -1, Detalhe = ex.Message };
+            }
+            catch (Exception ex)
+            {
+                return new CadastroResponse { Id = -1, Detalhe = ex.Message };
             }
         }
 
