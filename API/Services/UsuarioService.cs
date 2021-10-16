@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using API.Dominio.Exceptions;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
 using API.Dominio.Services;
@@ -26,12 +27,11 @@ namespace API.Services
 
                 //Validar se usuário já existe
                 if (await _usuarioRepository.ValidarUsuarioExistente(cadastro.Cpf) > 0)
-                    throw new Exception("Já existe um usuário cadastrado com os parâmetros informados.");
+                    throw new CadastroException("Já existe um usuário cadastrado com os parâmetros informados.");
 
                 var retorno = await _usuarioRepository.CadastrarUsuario(cadastro);
                 await _usuarioRepository.CadastrarSenha(retorno.IdUsuario, cadastro.Senha);
 
-                //Todo criar Enum para mensagens do sistema
                 retorno.Detalhe = "Usuário criado com sucesso!";
 
                 return retorno;

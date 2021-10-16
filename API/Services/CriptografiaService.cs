@@ -2,6 +2,7 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using API.Dominio.Exceptions;
 using API.Dominio.Services;
 
 namespace API.Services
@@ -37,7 +38,7 @@ namespace API.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex.InnerException);
+                throw new CriptografiaException(ex.Message, ex.InnerException);
             }
         }
 
@@ -71,7 +72,7 @@ namespace API.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message, ex.InnerException);
+                throw new CriptografiaException(ex.Message, ex.InnerException);
             }
 
         }
