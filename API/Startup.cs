@@ -35,6 +35,8 @@ namespace API
             services.AddScoped<ICriptografiaService, CriptografiaService>();
             services.AddScoped<IUsuarioRepository, UsuarioRepository>();
             services.AddScoped<IUsuarioService, UsuarioService>();
+            services.AddScoped<IAplicativoRepository, AplicativoRepository>();
+            services.AddScoped<IAplicativoService, AplicativoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

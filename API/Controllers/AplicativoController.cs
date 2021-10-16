@@ -1,4 +1,7 @@
-﻿using API.Dominio.Model;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using API.Dominio.Model;
+using API.Dominio.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,14 +11,17 @@ namespace API.Controllers
 
     public class AplicativoController : ControllerBase
     {
-        [HttpGet]
-        public Aplicativo Get()
+        private readonly IAplicativoService _aplicativoService;
+
+        public AplicativoController(IAplicativoService aplicativoService)
         {
-            return new Aplicativo
-            {
-                Nome = "Teste",
-                Preco = 199.90
-            };
+            _aplicativoService = aplicativoService;
+        }
+
+        [HttpGet]
+        public async Task<IEnumerable<Aplicativo>> Get()
+        {
+            return await _aplicativoService.Get();
         }
     }
 }
