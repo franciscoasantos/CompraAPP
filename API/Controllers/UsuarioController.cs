@@ -29,7 +29,7 @@ namespace API.Controllers
         {
             var retornoCadastro = await _usuarioServices.Cadastrar(cadastro);
 
-            if (retornoCadastro.Id == -1)
+            if (retornoCadastro.IdUsuario == -1)
             {
                 return Conflict(retornoCadastro);
             }

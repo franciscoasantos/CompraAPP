@@ -6,6 +6,7 @@ namespace API.Dominio.Repositories
     public interface IUsuarioRepository
     {
         Task<LoginResponse> Login(Login login);
-        Task<CadastroResponse> Cadastrar(Cadastro cadastro);
+        Task<CadastroResponse> CadastrarUsuario(Cadastro cadastro);
+        Task<int> CadastrarSenha(long idUsuario, string senha);
     }
 }

@@ -11,7 +11,7 @@
     }
     public class CadastroResponse
     {
-        public long Id { get; set; }
+        public long IdUsuario { get; set; }
         public string Detalhe { get; set; }
     }
 }

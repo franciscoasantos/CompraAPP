@@ -24,7 +24,9 @@ namespace API.Services
                 var criptografia = new CriptografiaService();
                 cadastro.Senha = criptografia.Criptografar(cadastro.Senha);
 
-                var retorno = await _usuarioRepository.Cadastrar(cadastro);
+                var retorno = await _usuarioRepository.CadastrarUsuario(cadastro);
+                await _usuarioRepository.CadastrarSenha(retorno.IdUsuario, cadastro.Senha);
+
                 //Todo criar Enum para mensagens do sistema
                 retorno.Detalhe = "Usuário criado com sucesso!";
 
@@ -34,13 +36,13 @@ namespace API.Services
             {
                 //Todo Enum para codigos de erro SQL
                 if (ex.Number == 2627)
-                    return new CadastroResponse { Id = -1, Detalhe = "Já existe um usuário cadastrado com os parâmetros informados." };
+                    return new CadastroResponse { IdUsuario = -1, Detalhe = "Já existe um usuário cadastrado com os parâmetros informados." };
                 else
-                    return new CadastroResponse { Id = -1, Detalhe = ex.Message };
+                    return new CadastroResponse { IdUsuario = -1, Detalhe = ex.Message };
             }
             catch (Exception ex)
             {
-                return new CadastroResponse { Id = -1, Detalhe = ex.Message };
+                return new CadastroResponse { IdUsuario = -1, Detalhe = ex.Message };
             }
         }
 
