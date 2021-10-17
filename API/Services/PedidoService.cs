@@ -1,22 +1,35 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using API.Dominio.Model;
-using API.Dominio.Repositories;
 using API.Dominio.Services;
 
 namespace API.Services
 {
     public class PedidoService : IPedidoService
     {
-        private readonly IPedidoRepository _pedidoRepository;
+        private readonly IMensageriaService _mensageriaService;
+        private readonly ICriptografiaService _criptografiaService;
 
-        public PedidoService(IPedidoRepository pedidoRepository)
+        public PedidoService(IMensageriaService mensageriaService, ICriptografiaService criptografiaService)
         {
-            _pedidoRepository = pedidoRepository;
+            _mensageriaService = mensageriaService;
+            _criptografiaService = criptografiaService;
         }
 
-        public Task<PedidoResponse> CriarPedido(Pedido pedido)
+        public async Task<PedidoResponse> CriarPedido(Pedido pedido)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                pedido.Cartao.Numero = _criptografiaService.Criptografar(pedido.Cartao.Numero);
+                pedido.Cartao.Vencimento = _criptografiaService.Criptografar(pedido.Cartao.Vencimento);
+                pedido.Cartao.CodigoSeguranca = _criptografiaService.Criptografar(pedido.Cartao.CodigoSeguranca);
+                await _mensageriaService.ProcessarPedido(pedido);
+                return new PedidoResponse { Sucesso = true };
+            }
+            catch (Exception ex)
+            {
+                return new PedidoResponse { Sucesso = false, Detalhe = ex.Message };
+            }
         }
     }
 }

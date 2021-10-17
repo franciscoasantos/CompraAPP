@@ -39,8 +39,8 @@ namespace API
             services.AddScoped<ILoginService, LoginService>();
             services.AddScoped<IAplicativoRepository, AplicativoRepository>();
             services.AddScoped<IAplicativoService, AplicativoService>();
-            services.AddScoped<IPedidoRepository, PedidoRepository>();
             services.AddScoped<IPedidoService, PedidoService>();
+            services.AddScoped<IMensageriaService, MensageriaService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
