@@ -11,10 +11,12 @@ namespace KafkaConsumer.Services
     public class PedidoService : IPedidoService
     {
         private readonly IPedidoRepository _pedidoRepository;
+        private readonly ICartaoService _cartaoService;
 
-        public PedidoService(IPedidoRepository pedidoRepository)
+        public PedidoService(IPedidoRepository pedidoRepository, ICartaoService cartaoService)
         {
             _pedidoRepository = pedidoRepository;
+            _cartaoService = cartaoService;
         }
 
         public async Task<PedidoResponse> ProcessarPedido(string mensagem)
@@ -25,7 +27,16 @@ namespace KafkaConsumer.Services
                 await _pedidoRepository.CriarPedido(pedido);
 
                 if (pedido.SalvarCartao)
-                    await _pedidoRepository.IncluirCartao(pedido.Cartao);
+                {
+                    Cartao cartao = new()
+                    {
+                        IdCliente = pedido.IdCliente,
+                        Numero = pedido.Cartao.Numero,
+                        Vencimento = pedido.Cartao.Vencimento,
+                        CodigoSeguranca = pedido.Cartao.CodigoSeguranca
+                    };
+                    await _cartaoService.IncluirCartao(cartao);
+                }
 
                 return new PedidoResponse { Sucesso = true };
             }

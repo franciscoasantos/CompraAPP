@@ -19,11 +19,13 @@ namespace KafkaConsumer
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
-                    services.AddScoped<DbSession>();
-                    services.AddTransient<IUnitOfWork, UnitOfWork>();
-                    //services.AddScoped<ICriptografiaService, CriptografiaService>();
+                    services.AddSingleton<DbSession>();
+                    services.AddSingleton<IUnitOfWork, UnitOfWork>();
+                    //services.AddSingleton<ICriptografiaService, CriptografiaService>();
                     services.AddSingleton<IPedidoRepository, PedidoRepository>();
                     services.AddSingleton<IPedidoService, PedidoService>();
+                    services.AddSingleton<ICartaoRepository, CartaoRepository>();
+                    services.AddSingleton<ICartaoService, CartaoService>();
                 });
     }
 }

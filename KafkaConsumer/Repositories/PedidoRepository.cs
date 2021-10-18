@@ -1,19 +1,33 @@
-﻿using System.Threading.Tasks;
+﻿using System.Text;
+using System.Threading.Tasks;
 using KafkaConsumer.Dominio.Model;
 using KafkaConsumer.Dominio.Repositories;
+using KafkaConsumer.Services;
+using Dapper;
 
 namespace KafkaConsumer.Repositories
 {
     class PedidoRepository : IPedidoRepository
     {
+        private readonly DbSession _sessao;
+
+        public PedidoRepository(DbSession sessao)
+        {
+            _sessao = sessao;
+        }
         public Task<int> CriarPedido(Pedido pedido)
         {
-            throw new System.NotImplementedException();
-        }
+            StringBuilder sb = new();
 
-        public Task<int> IncluirCartao(Cartao cartao)
-        {
-            throw new System.NotImplementedException();
+            sb.AppendLine(" INSERT INTO pedidos ");
+            sb.AppendLine(" VALUES (            ");
+            sb.AppendLine("      @IdCliente     ");
+            sb.AppendLine("     ,@IdAplicativo  ");
+            sb.AppendLine("     ,'P')            ");
+
+            var parameter = new DynamicParameters(pedido);
+
+            return _sessao.Connection.ExecuteAsync(sb.ToString(), parameter);
         }
     }
 }
