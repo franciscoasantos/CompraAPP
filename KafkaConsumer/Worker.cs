@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Confluent.Kafka;
+using KafkaConsumer.Dominio.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -14,14 +13,16 @@ namespace KafkaConsumer
     {
         private readonly ILogger<Worker> _logger;
         private readonly IConfiguration _config;
+        private readonly IPedidoService _pedidoService;
 
         private string KafkaHost;
         private string KafkaTopic;
 
-        public Worker(ILogger<Worker> logger, IConfiguration config)
+        public Worker(ILogger<Worker> logger, IConfiguration config, IPedidoService pedidoService)
         {
             _logger = logger;
             _config = config;
+            _pedidoService = pedidoService;
             RecuperarConfig();
         }
 
@@ -36,18 +37,19 @@ namespace KafkaConsumer
             {
                 GroupId = "test-consumer-group",
                 BootstrapServers = KafkaHost,
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                AutoOffsetReset = AutoOffsetReset.Earliest,
+                EnableAutoCommit = false
             };
 
-            using var c = new ConsumerBuilder<Ignore, string>(conf).Build();
+            using var consumer = new ConsumerBuilder<Ignore, string>(conf).Build();
 
-            c.Subscribe(KafkaTopic);
+            consumer.Subscribe(KafkaTopic);
 
-            var cts = new CancellationTokenSource();
+            var cancellationToken = new CancellationTokenSource();
             Console.CancelKeyPress += (_, e) =>
             {
                 e.Cancel = true;
-                cts.Cancel();
+                cancellationToken.Cancel();
             };
 
             try
@@ -58,18 +60,23 @@ namespace KafkaConsumer
                 {
                     try
                     {
-                        var cr = c.Consume(cts.Token);
-                        Console.WriteLine($"Consumed message '{cr.Message.Value}' at: '{cr.TopicPartitionOffset}'.");
+                        var consumerResult = consumer.Consume(cancellationToken.Token);
+
+                        await _pedidoService.ProcessarPedido(consumerResult.Message.Value);
+
+                        consumer.Commit(consumerResult);
+                        
+                        Console.WriteLine($"Consumed message '{consumerResult.Message.Value}' at: '{consumerResult.TopicPartitionOffset}'.");
                     }
-                    catch (ConsumeException e)
+                    catch (Exception ex)
                     {
-                        Console.WriteLine($"Error occured: {e.Error.Reason}");
+                        _logger.LogError(ex.Message);
                     }
                 }
             }
             catch (OperationCanceledException)
             {
-                c.Close();
+                consumer.Close();
             }
         }
     }

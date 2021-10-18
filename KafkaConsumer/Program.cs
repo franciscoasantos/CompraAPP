@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using KafkaConsumer.Dominio.Repositories;
+using KafkaConsumer.Dominio.Services;
+using KafkaConsumer.Repositories;
+using KafkaConsumer.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,6 +19,11 @@ namespace KafkaConsumer
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<Worker>();
+                    services.AddScoped<DbSession>();
+                    services.AddTransient<IUnitOfWork, UnitOfWork>();
+                    //services.AddScoped<ICriptografiaService, CriptografiaService>();
+                    services.AddSingleton<IPedidoRepository, PedidoRepository>();
+                    services.AddSingleton<IPedidoService, PedidoService>();
                 });
     }
 }
