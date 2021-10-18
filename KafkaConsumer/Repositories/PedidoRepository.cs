@@ -21,7 +21,7 @@ namespace KafkaConsumer.Repositories
 
             sb.AppendLine(" INSERT INTO pedidos ");
             sb.AppendLine(" VALUES (            ");
-            sb.AppendLine("      @IdCliente     ");
+            sb.AppendLine("      @IdUsuario     ");
             sb.AppendLine("     ,@IdAplicativo  ");
             sb.AppendLine("     ,'P')            ");
 

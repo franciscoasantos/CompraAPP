@@ -30,7 +30,7 @@ namespace KafkaConsumer.Services
                 {
                     Cartao cartao = new()
                     {
-                        IdCliente = pedido.IdCliente,
+                        IdUsuario = pedido.IdUsuario,
                         Numero = pedido.Cartao.Numero,
                         Vencimento = pedido.Cartao.Vencimento,
                         CodigoSeguranca = pedido.Cartao.CodigoSeguranca

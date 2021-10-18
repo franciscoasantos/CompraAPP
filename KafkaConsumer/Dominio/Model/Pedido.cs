@@ -2,7 +2,7 @@
 {
     public class Pedido
     {
-        public long IdCliente { get; set; }
+        public long IdUsuario { get; set; }
         public long IdAplicativo { get; set; }
         public Cartao Cartao { get; set; }
         public bool SalvarCartao { get; set; }

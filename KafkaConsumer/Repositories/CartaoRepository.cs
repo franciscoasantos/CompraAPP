@@ -21,7 +21,7 @@ namespace KafkaConsumer.Repositories
 
             sb.AppendLine(" INSERT INTO cartoes    ");
             sb.AppendLine(" VALUES (               ");
-            sb.AppendLine("      @IdCliente        ");
+            sb.AppendLine("      @IdUsuario        ");
             sb.AppendLine("     ,@Numero           ");
             sb.AppendLine("     ,@Vencimento       ");
             sb.AppendLine("     ,@CodigoSeguranca) ");
@@ -37,7 +37,7 @@ namespace KafkaConsumer.Repositories
 
             sb.AppendLine(" SELECT COUNT(*)              ");
             sb.AppendLine(" FROM cartoes                 ");
-            sb.AppendLine(" WHERE IdUsuario = @IdCliente ");
+            sb.AppendLine(" WHERE IdUsuario = @IdUsuario ");
             sb.AppendLine("     AND numero = @Numero     ");
 
             var parameters = new DynamicParameters(cartao);

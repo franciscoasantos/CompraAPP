@@ -21,7 +21,7 @@ namespace API.Repositories
             StringBuilder sb = new();
 
             sb.AppendLine(" INSERT INTO users                   ");
-            sb.AppendLine(" OUTPUT inserted.idUsuario IdUsuario ");
+            sb.AppendLine(" OUTPUT inserted.id IdUsuario        ");
             sb.AppendLine(" VALUES (                            ");
             sb.AppendLine("     @Nome                           ");
             sb.AppendLine("     ,@Cpf                           ");

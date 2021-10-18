@@ -21,7 +21,7 @@ namespace API.Repositories
             sb.AppendLine(" SELECT cpf Cpf                                          ");
             sb.AppendLine("     ,senha Senha                                        ");
             sb.AppendLine(" FROM users                                              ");
-            sb.AppendLine(" INNER JOIN senhas ON users.idUsuario = senhas.idUsuario ");
+            sb.AppendLine(" INNER JOIN senhas ON users.id = senhas.idUsuario        ");
             sb.AppendLine(" WHERE cpf = @Cpf                                        ");
 
             var template = new { Cpf = login.Usuario };
