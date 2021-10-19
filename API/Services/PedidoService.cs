@@ -25,7 +25,7 @@ namespace API.Services
             try
             {
                 if (!await CartaoEhValido(pedido.Cartao))
-                    throw new PedidoException("O cartão informado não é válido.");
+                    return new PedidoResponse { Sucesso = false, Detalhe = "O cartão informado não é válido." };
 
                 pedido.Cartao.Numero = _criptografiaService.Criptografar(pedido.Cartao.Numero);
                 pedido.Cartao.Vencimento = _criptografiaService.Criptografar(pedido.Cartao.Vencimento);
