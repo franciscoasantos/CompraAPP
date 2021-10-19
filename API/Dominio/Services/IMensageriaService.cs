@@ -6,6 +6,6 @@ namespace API.Dominio.Services
 {
     public interface IMensageriaService
     {
-        public Task<DeliveryResult<Null, string>> ProcessarPedido(Pedido pedido);
+        public Task<bool> ProcessarPedido(Pedido pedido);
     }
 }

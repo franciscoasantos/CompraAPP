@@ -2,44 +2,40 @@
 using System.Threading.Tasks;
 using API.Dominio.Exceptions;
 using API.Dominio.Model;
+using API.Dominio.Repositories;
 using API.Dominio.Services;
-using Confluent.Kafka;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 
 namespace API.Services
 {
     public class MensageriaService : IMensageriaService
     {
         private readonly IConfiguration _config;
-        private string KafkaHost;
-        private string KafkaTopic;
-        public MensageriaService(IConfiguration config)
+        private readonly IMensageriaRepository _mensageriaRepository;
+
+        public MensageriaService(IConfiguration config, IMensageriaRepository mensageriaRepository)
         {
             _config = config;
-            RecuperarConfig();
+            _mensageriaRepository = mensageriaRepository;
         }
 
-        private void RecuperarConfig()
+        public async Task<bool> ProcessarPedido(Pedido pedido)
         {
-            KafkaHost = _config.GetSection("Configuracoes:kafkaHost").Value;
-            KafkaTopic = _config.GetSection("Configuracoes:kafkaTopic").Value;
-        }
-
-        public async Task<DeliveryResult<Null, string>> ProcessarPedido(Pedido pedido)
-        {
-            var config = new ProducerConfig { BootstrapServers = KafkaHost };
-
-            using var p = new ProducerBuilder<Null, string>(config).Build();
-
             try
             {
-                var dr = await p.ProduceAsync(KafkaTopic, new Message<Null, string> { Value = JsonConvert.SerializeObject(pedido) });
-                return dr;
+                var kafkaHost = _config.GetSection("Configuracoes:kafkaHost").Value;
+                var kafkaTopic = _config.GetSection("Configuracoes:kafkaTopic").Value;
+
+                if (kafkaHost == null || kafkaTopic == null)
+                    throw new MensageriaException("As keys kafkaHost e/ou kafkaTopic não foram configuradas corretamente no appsettings.json.");
+
+                await _mensageriaRepository.EnviarPedido(pedido, kafkaHost, kafkaTopic);
+
+                return true;
             }
-            catch (ProduceException<Null, string> e)
+            catch (Exception ex)
             {
-                throw new MensageriaException(e.Error.Reason);
+                throw new MensageriaException(ex.Message, ex.InnerException);
             }
         }
     }

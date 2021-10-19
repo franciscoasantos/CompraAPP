@@ -41,6 +41,7 @@ namespace API
             services.AddScoped<IAplicativoRepository, AplicativoRepository>();
             services.AddScoped<IAplicativoService, AplicativoService>();
             services.AddScoped<IPedidoService, PedidoService>();
+            services.AddScoped<IMensageriaRepository, MensageriaRepository>();
             services.AddScoped<IMensageriaService, MensageriaService>();
         }
 
