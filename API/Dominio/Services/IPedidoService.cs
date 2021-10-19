@@ -6,5 +6,6 @@ namespace API.Dominio.Services
     public interface IPedidoService
     {
         public Task<PedidoResponse> CriarPedido(Pedido pedido);
+        public Task<bool> CartaoEhValido(Cartao cartao);
     }
 }

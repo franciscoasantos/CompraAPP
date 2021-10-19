@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using API.Dominio.Exceptions;
 using API.Dominio.Model;
 using API.Dominio.Services;
 using Microsoft.Extensions.Logging;
@@ -23,9 +24,13 @@ namespace API.Services
         {
             try
             {
+                if (!await CartaoEhValido(pedido.Cartao))
+                    throw new PedidoException("O cartão informado não é válido.");
+
                 pedido.Cartao.Numero = _criptografiaService.Criptografar(pedido.Cartao.Numero);
                 pedido.Cartao.Vencimento = _criptografiaService.Criptografar(pedido.Cartao.Vencimento);
                 pedido.Cartao.CodigoSeguranca = _criptografiaService.Criptografar(pedido.Cartao.CodigoSeguranca);
+
                 await _mensageriaService.ProcessarPedido(pedido);
                 return new PedidoResponse { Sucesso = true };
             }
@@ -34,6 +39,14 @@ namespace API.Services
                 _logger.LogError(ex, ex.Message);
                 return new PedidoResponse { Sucesso = false, Detalhe = ex.Message };
             }
+        }
+        public async Task<bool> CartaoEhValido(Cartao cartao)
+        {
+            if (cartao.Numero.Length == 16)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
