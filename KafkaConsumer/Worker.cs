@@ -61,16 +61,12 @@ namespace KafkaConsumer
                     try
                     {
                         var consumerResult = consumer.Consume(cancellationToken.Token);
-
                         await _pedidoService.ProcessarPedido(consumerResult.Message.Value);
-
                         consumer.Commit(consumerResult);
-                        
-                        Console.WriteLine($"Consumed message '{consumerResult.Message.Value}' at: '{consumerResult.TopicPartitionOffset}'.");
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex.Message);
+                        _logger.LogError(ex, ex.Message);
                     }
                 }
             }

@@ -4,16 +4,19 @@ using API.Dominio.Exceptions;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
 using API.Dominio.Services;
+using Microsoft.Extensions.Logging;
 
 namespace API.Services
 {
     public class UsuarioService : IUsuarioService
     {
+        private readonly ILogger<UsuarioService> _logger;
         private readonly IUsuarioRepository _usuarioRepository;
         private readonly ICriptografiaService _criptografiaService;
 
-        public UsuarioService(IUsuarioRepository usuarioRepository, ICriptografiaService criptografiaService)
+        public UsuarioService(ILogger<UsuarioService> logger, IUsuarioRepository usuarioRepository, ICriptografiaService criptografiaService)
         {
+            _logger = logger;
             _usuarioRepository = usuarioRepository;
             _criptografiaService = criptografiaService;
         }
@@ -38,6 +41,7 @@ namespace API.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new CadastroResponse { Sucesso = false, Detalhe = ex.Message };
             }
         }

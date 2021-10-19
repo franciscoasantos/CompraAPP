@@ -3,16 +3,19 @@ using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
 using API.Dominio.Services;
+using Microsoft.Extensions.Logging;
 
 namespace API.Services
 {
     public class LoginService : ILoginService
     {
+        private readonly ILogger<LoginService> _logger;
         private readonly ILoginRepository _loginRepository;
         private readonly ICriptografiaService _criptografiaService;
 
-        public LoginService(ILoginRepository loginRepository, ICriptografiaService criptografiaService)
+        public LoginService(ILogger<LoginService> logger, ILoginRepository loginRepository, ICriptografiaService criptografiaService)
         {
+            _logger = logger;
             _loginRepository = loginRepository;
             _criptografiaService = criptografiaService;
         }
@@ -30,6 +33,7 @@ namespace API.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new LoginResponse { Logado = false, Detalhe = ex.Message };
             }
         }

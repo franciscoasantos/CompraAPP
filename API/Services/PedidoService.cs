@@ -2,16 +2,19 @@
 using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Services;
+using Microsoft.Extensions.Logging;
 
 namespace API.Services
 {
     public class PedidoService : IPedidoService
     {
+        private readonly ILogger<PedidoService> _logger;
         private readonly IMensageriaService _mensageriaService;
         private readonly ICriptografiaService _criptografiaService;
 
-        public PedidoService(IMensageriaService mensageriaService, ICriptografiaService criptografiaService)
+        public PedidoService(ILogger<PedidoService> logger, IMensageriaService mensageriaService, ICriptografiaService criptografiaService)
         {
+            _logger = logger;
             _mensageriaService = mensageriaService;
             _criptografiaService = criptografiaService;
         }
@@ -28,6 +31,7 @@ namespace API.Services
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new PedidoResponse { Sucesso = false, Detalhe = ex.Message };
             }
         }
