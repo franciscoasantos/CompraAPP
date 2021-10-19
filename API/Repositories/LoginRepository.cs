@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
@@ -14,7 +15,7 @@ namespace API.Repositories
         {
             _sessao = sessao;
         }
-        public async Task<Login> BuscarDadosLogin(Login login)
+        public async Task<IEnumerable<Login>> BuscarDadosLogin(Login login)
         {
             StringBuilder sb = new();
 
@@ -27,7 +28,7 @@ namespace API.Repositories
             var template = new { Cpf = login.Usuario };
             var parameters = new DynamicParameters(template);
 
-            return await _sessao.Connection.QueryFirstAsync<Login>(sb.ToString(), parameters);
+            return await _sessao.Connection.QueryAsync<Login>(sb.ToString(), parameters);
         }
     }
 }

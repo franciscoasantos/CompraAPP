@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
@@ -26,10 +27,15 @@ namespace API.Services
             {
                 var retorno = await _loginRepository.BuscarDadosLogin(login);
 
-                if (retorno != null && _criptografiaService.Criptografar(login.Senha) == retorno.Senha)
-                    return new LoginResponse { Logado = true, Detalhe = "Login efetuado com sucesso!" };
+                if (retorno.Any())
+                {
+                    if (_criptografiaService.Criptografar(login.Senha) != retorno.FirstOrDefault().Senha)
+                        return new LoginResponse { Logado = false, Detalhe = "Usuário ou senha inválidos!" };
+                }
+                else
+                    return new LoginResponse { Logado = false, Detalhe = "Usuario não cadastrado." };
 
-                return new LoginResponse { Logado = false, Detalhe = "Usuário ou senha inválidos!" };
+                return new LoginResponse { Logado = true, Detalhe = "Login efetuado com sucesso!" };
             }
             catch (Exception ex)
             {
