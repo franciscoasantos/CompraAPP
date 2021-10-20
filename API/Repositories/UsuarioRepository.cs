@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
 using API.Services;

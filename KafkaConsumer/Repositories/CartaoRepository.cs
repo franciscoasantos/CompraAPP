@@ -1,5 +1,4 @@
-﻿using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Dapper;
 using KafkaConsumer.Dominio.Model;
 using KafkaConsumer.Dominio.Repositories;

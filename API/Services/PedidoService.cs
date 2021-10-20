@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using API.Dominio.Exceptions;
 using API.Dominio.Model;
 using API.Dominio.Repositories;
 using API.Dominio.Services;

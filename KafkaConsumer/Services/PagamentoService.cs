@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using KafkaConsumer.Dominio.Exceptions;
 using KafkaConsumer.Dominio.Model;
 using KafkaConsumer.Dominio.Repositories;
