@@ -9,7 +9,7 @@ namespace API.Repositories
 {
     public class MensageriaRepository : IMensageriaRepository
     {
-        public async Task<DeliveryResult<Null, string>> EnviarPedido(Pedido pedido, string kafkaHost, string kafkaTopic)
+        public async Task<DeliveryResult<Null, string>> EnviarPedido(PedidoMensagem pedido, string kafkaHost, string kafkaTopic)
         {
             var config = new ProducerConfig { BootstrapServers = kafkaHost };
 

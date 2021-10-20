@@ -6,6 +6,6 @@ namespace API.Dominio.Repositories
 {
     public interface IMensageriaRepository
     {
-        public Task<DeliveryResult<Null, string>> EnviarPedido(Pedido pedido, string kafkaHost, string kafkaTopic);
+        public Task<DeliveryResult<Null, string>> EnviarPedido(PedidoMensagem pedido, string kafkaHost, string kafkaTopic);
     }
 }

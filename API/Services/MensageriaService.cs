@@ -19,7 +19,7 @@ namespace API.Services
             _mensageriaRepository = mensageriaRepository;
         }
 
-        public async Task<bool> ProcessarPedido(Pedido pedido)
+        public async Task<bool> ProcessarPedido(PedidoMensagem pedido)
         {
             try
             {
