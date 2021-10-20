@@ -32,7 +32,7 @@ namespace API.Repositories
             var template = new { cadastro.Nome, cadastro.Cpf, cadastro.DataNascimento, cadastro.Sexo, Endereco = cadastro.Endereco.ToString() };
             var parameters = new DynamicParameters(template);
 
-            return await _sessao.Connection.QueryFirstAsync<CadastroResponse>(sb.ToString(), parameters);
+            return await _sessao.Connection.QueryFirstAsync<CadastroResponse>(sb.ToString(), parameters, _sessao.Transaction);
         }
 
         public async Task<int> CadastrarSenha(long idUsuario, string senha)
@@ -47,7 +47,8 @@ namespace API.Repositories
             var template = new { idUsuario, senha };
             var parameters = new DynamicParameters(template);
 
-            return await _sessao.Connection.ExecuteAsync(sb.ToString(), parameters);
+            var retorno =  await _sessao.Connection.ExecuteAsync(sb.ToString(), parameters, _sessao.Transaction);
+            return retorno;
         }
 
         public async Task<int> ValidarUsuarioExistente(string cpf)

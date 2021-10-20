@@ -7,5 +7,6 @@ namespace API.Dominio.Repositories
         void BeginTransaction();
         void Commit();
         void Rollback();
+        bool ExisteTransacao();
     }
 }
