@@ -18,7 +18,7 @@ namespace KafkaConsumer.Services
         {
             try
             {
-                if (await _cartaoRepository.ValidarCartaoExistente(cartao) == 0)
+                if (await _cartaoRepository.ExisteCartaoCadastrado(cartao) == 0)
                     await _cartaoRepository.IncluirCartao(cartao);
 
                 return true;

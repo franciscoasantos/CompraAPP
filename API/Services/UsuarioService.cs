@@ -31,7 +31,7 @@ namespace API.Services
                 cadastro.Senha = _criptografiaService.Criptografar(cadastro.Senha);
 
                 //Validar se usuário já existe
-                if (await _usuarioRepository.ValidarUsuarioExistente(cadastro.Cpf) > 0)
+                if (await _usuarioRepository.ExisteUsuarioCadastrado(cadastro.Cpf) > 0)
                     throw new CadastroException("Já existe um usuário cadastrado com os parâmetros informados.");
 
                 _unitOfWork.BeginTransaction();

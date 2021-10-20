@@ -31,7 +31,7 @@ namespace KafkaConsumer.Repositories
             return await _sessao.Connection.ExecuteAsync(sb.ToString(), parameter, _sessao.Transaction);
         }
 
-        public async Task<int> ValidarCartaoExistente(Cartao cartao)
+        public async Task<int> ExisteCartaoCadastrado(Cartao cartao)
         {
             StringBuilder sb = new();
 

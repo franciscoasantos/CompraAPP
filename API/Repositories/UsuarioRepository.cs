@@ -51,7 +51,7 @@ namespace API.Repositories
             return retorno;
         }
 
-        public async Task<int> ValidarUsuarioExistente(string cpf)
+        public async Task<int> ExisteUsuarioCadastrado(string cpf)
         {
             StringBuilder sb = new();
 

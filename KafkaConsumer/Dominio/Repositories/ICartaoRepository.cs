@@ -6,6 +6,6 @@ namespace KafkaConsumer.Dominio.Repositories
     public interface ICartaoRepository
     {
         public Task<int> IncluirCartao(Cartao cartao);
-        public Task<int> ValidarCartaoExistente(Cartao cartao);
+        public Task<int> ExisteCartaoCadastrado(Cartao cartao);
     }
 }
