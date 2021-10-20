@@ -53,6 +53,8 @@ namespace API
                     };
                 });
 
+            services.AddMemoryCache();
+
             services.AddScoped<DbSession>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddScoped<ICriptografiaService, CriptografiaService>();
