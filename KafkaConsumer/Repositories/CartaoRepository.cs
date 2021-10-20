@@ -28,7 +28,7 @@ namespace KafkaConsumer.Repositories
 
             var parameter = new DynamicParameters(cartao);
 
-            return await _sessao.Connection.ExecuteAsync(sb.ToString(), parameter);
+            return await _sessao.Connection.ExecuteAsync(sb.ToString(), parameter, _sessao.Transaction);
         }
 
         public async Task<int> ValidarCartaoExistente(Cartao cartao)
@@ -42,7 +42,7 @@ namespace KafkaConsumer.Repositories
 
             var parameters = new DynamicParameters(cartao);
 
-            return await _sessao.Connection.QueryFirstAsync<int>(sb.ToString(), parameters);
+            return await _sessao.Connection.QueryFirstAsync<int>(sb.ToString(), parameters, _sessao.Transaction);
         }
     }
 }

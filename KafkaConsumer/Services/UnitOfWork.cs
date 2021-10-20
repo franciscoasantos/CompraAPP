@@ -28,6 +28,12 @@ namespace KafkaConsumer.Services
             Dispose();
         }
 
+        public bool ExisteTransacao()
+        {
+            return _session.Transaction != null;
+        }
+
         public void Dispose() => _session.Transaction?.Dispose();
+
     }
 }

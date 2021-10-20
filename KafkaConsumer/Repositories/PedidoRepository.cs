@@ -29,7 +29,7 @@ namespace KafkaConsumer.Repositories
 
             var parameter = new DynamicParameters(pedido);
 
-            return await _sessao.Connection.QueryFirstAsync<long>(sb.ToString(), parameter);
+            return await _sessao.Connection.QueryFirstAsync<long>(sb.ToString(), parameter, _sessao.Transaction);
         }
 
         public async Task<int> AtualizarStatusPedido(long idPedido, string statusPedido)
