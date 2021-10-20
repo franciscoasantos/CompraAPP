@@ -29,11 +29,11 @@ namespace KafkaConsumer
                     services.AddHostedService<Worker>();
                     services.AddSingleton<DbSession>();
                     services.AddSingleton<IUnitOfWork, UnitOfWork>();
-                    //services.AddSingleton<ICriptografiaService, CriptografiaService>();
                     services.AddSingleton<IPedidoRepository, PedidoRepository>();
                     services.AddSingleton<IPedidoService, PedidoService>();
                     services.AddSingleton<ICartaoRepository, CartaoRepository>();
                     services.AddSingleton<ICartaoService, CartaoService>();
+                    services.AddSingleton<IPagamentoService, PagamentoService>();
                 });
     }
 }

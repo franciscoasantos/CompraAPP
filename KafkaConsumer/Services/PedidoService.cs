@@ -12,11 +12,13 @@ namespace KafkaConsumer.Services
     {
         private readonly IPedidoRepository _pedidoRepository;
         private readonly ICartaoService _cartaoService;
+        private readonly IPagamentoService _pagamentoService;
 
-        public PedidoService(IPedidoRepository pedidoRepository, ICartaoService cartaoService)
+        public PedidoService(IPedidoRepository pedidoRepository, ICartaoService cartaoService, IPagamentoService pagamentoService)
         {
             _pedidoRepository = pedidoRepository;
             _cartaoService = cartaoService;
+            _pagamentoService = pagamentoService;
         }
 
         public async Task<PedidoResponse> ProcessarPedido(string mensagem)
@@ -24,25 +26,26 @@ namespace KafkaConsumer.Services
             try
             {
                 Pedido pedido = JsonConvert.DeserializeObject<Pedido>(mensagem);
-                await _pedidoRepository.CriarPedido(pedido);
+                var idPedido = await _pedidoRepository.CriarPedido(pedido);
+
+                Cartao cartao = new()
+                {
+                    IdUsuario = pedido.IdUsuario,
+                    Numero = pedido.Cartao.Numero,
+                    Vencimento = pedido.Cartao.Vencimento,
+                    CodigoSeguranca = pedido.Cartao.CodigoSeguranca
+                };
 
                 if (pedido.SalvarCartao)
-                {
-                    Cartao cartao = new()
-                    {
-                        IdUsuario = pedido.IdUsuario,
-                        Numero = pedido.Cartao.Numero,
-                        Vencimento = pedido.Cartao.Vencimento,
-                        CodigoSeguranca = pedido.Cartao.CodigoSeguranca
-                    };
                     await _cartaoService.IncluirCartao(cartao);
-                }
+
+                _pagamentoService.ProcessarPagamentoCartao(idPedido, cartao);
 
                 return new PedidoResponse { Sucesso = true };
             }
             catch (Exception ex)
             {
-                throw new PedidoException(ex.Message);
+                throw new PedidoException(ex.Message, ex.InnerException);
             }
         }
     }
