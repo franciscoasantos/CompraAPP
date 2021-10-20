@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -17,6 +18,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] Pedido pedido)
         {
             return Ok(await _pedidoService.CriarPedido(pedido));

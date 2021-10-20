@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using API.Dominio.Model;
 using API.Dominio.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -19,6 +20,7 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] Login login)
         {
             var retornoLogin = await _loginService.Login(login);
@@ -30,6 +32,7 @@ namespace API.Controllers
         }
 
         [HttpPost("cadastro")]
+        [AllowAnonymous]
         public async Task<IActionResult> Cadastro([FromBody] Cadastro cadastro)
         {
             var retornoCadastro = await _usuarioServices.Cadastrar(cadastro);

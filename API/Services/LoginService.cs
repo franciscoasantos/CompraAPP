@@ -11,12 +11,14 @@ namespace API.Services
     public class LoginService : ILoginService
     {
         private readonly ILogger<LoginService> _logger;
+        private readonly ITokenService _tokenService;
         private readonly ILoginRepository _loginRepository;
         private readonly ICriptografiaService _criptografiaService;
 
-        public LoginService(ILogger<LoginService> logger, ILoginRepository loginRepository, ICriptografiaService criptografiaService)
+        public LoginService(ILogger<LoginService> logger, ITokenService tokenService, ILoginRepository loginRepository, ICriptografiaService criptografiaService)
         {
             _logger = logger;
+            _tokenService = tokenService;
             _loginRepository = loginRepository;
             _criptografiaService = criptografiaService;
         }
@@ -35,7 +37,9 @@ namespace API.Services
                 else
                     return new LoginResponse { Logado = false, Detalhe = "Usuario não cadastrado." };
 
-                return new LoginResponse { Logado = true, Detalhe = "Login efetuado com sucesso!" };
+                var token = _tokenService.GerarToken(login);
+
+                return new LoginResponse { Logado = true, Token = token};
             }
             catch (Exception ex)
             {

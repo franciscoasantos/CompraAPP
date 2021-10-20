@@ -9,6 +9,7 @@
     {
         public bool Logado { get; set; }
         public string Detalhe { get; set; }
+        public string Token { get; set; }
     }
 
 }
