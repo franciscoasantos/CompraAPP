@@ -21,14 +21,12 @@ namespace API.Repositories
 
         public async Task<IEnumerable<Aplicativo>> Get()
         {
-            StringBuilder sb = new();
+            string query = @"SELECT id Id    
+                                 ,nome Nome  
+                                 ,preco Preco
+                             FROM aplicativos";
 
-            sb.AppendLine(" SELECT id Id     ");
-            sb.AppendLine("     ,nome Nome   ");
-            sb.AppendLine("     ,preco Preco ");
-            sb.AppendLine(" FROM aplicativos ");
-
-            return await _sessao.Connection.QueryAsync<Aplicativo>(sb.ToString());
+            return await _sessao.Connection.QueryAsync<Aplicativo>(query);
         }
     }
 }

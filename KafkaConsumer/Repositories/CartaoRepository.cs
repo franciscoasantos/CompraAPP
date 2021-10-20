@@ -17,32 +17,28 @@ namespace KafkaConsumer.Repositories
         }
         public async Task<int> IncluirCartao(Cartao cartao)
         {
-            StringBuilder sb = new();
-
-            sb.AppendLine(" INSERT INTO cartoes    ");
-            sb.AppendLine(" VALUES (               ");
-            sb.AppendLine("      @IdUsuario        ");
-            sb.AppendLine("     ,@Numero           ");
-            sb.AppendLine("     ,@Vencimento       ");
-            sb.AppendLine("     ,@CodigoSeguranca) ");
+            string query = @"INSERT INTO cartoes   
+                             VALUES (              
+                                  @IdUsuario       
+                                 ,@Numero          
+                                 ,@Vencimento      
+                                 ,@CodigoSeguranca)";
 
             var parameter = new DynamicParameters(cartao);
 
-            return await _sessao.Connection.ExecuteAsync(sb.ToString(), parameter, _sessao.Transaction);
+            return await _sessao.Connection.ExecuteAsync(query, parameter, _sessao.Transaction);
         }
 
         public async Task<int> ExisteCartaoCadastrado(Cartao cartao)
         {
-            StringBuilder sb = new();
-
-            sb.AppendLine(" SELECT COUNT(*)              ");
-            sb.AppendLine(" FROM cartoes                 ");
-            sb.AppendLine(" WHERE IdUsuario = @IdUsuario ");
-            sb.AppendLine("     AND numero = @Numero     ");
+            string query = @"SELECT COUNT(*)             
+                             FROM cartoes                
+                             WHERE IdUsuario = @IdUsuario
+                                 AND numero = @Numero";
 
             var parameters = new DynamicParameters(cartao);
 
-            return await _sessao.Connection.QueryFirstAsync<int>(sb.ToString(), parameters, _sessao.Transaction);
+            return await _sessao.Connection.QueryFirstAsync<int>(query, parameters, _sessao.Transaction);
         }
     }
 }

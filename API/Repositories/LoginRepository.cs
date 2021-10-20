@@ -17,18 +17,16 @@ namespace API.Repositories
         }
         public async Task<IEnumerable<Login>> BuscarDadosLogin(Login login)
         {
-            StringBuilder sb = new();
-
-            sb.AppendLine(" SELECT cpf Cpf                                          ");
-            sb.AppendLine("     ,senha Senha                                        ");
-            sb.AppendLine(" FROM users                                              ");
-            sb.AppendLine(" INNER JOIN senhas ON users.id = senhas.idUsuario        ");
-            sb.AppendLine(" WHERE cpf = @Cpf                                        ");
+            string query = @"SELECT cpf Cpf                                  
+                                 ,senha Senha                                
+                             FROM users                                      
+                             INNER JOIN senhas ON users.id = senhas.idUsuario
+                             WHERE cpf = @Cpf";
 
             var template = new { Cpf = login.Usuario };
             var parameters = new DynamicParameters(template);
 
-            return await _sessao.Connection.QueryAsync<Login>(sb.ToString(), parameters);
+            return await _sessao.Connection.QueryAsync<Login>(query, parameters);
         }
     }
 }
