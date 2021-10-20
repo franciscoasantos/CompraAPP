@@ -35,7 +35,7 @@ namespace KafkaConsumer
         {
             var conf = new ConsumerConfig
             {
-                GroupId = "test-consumer-group",
+                GroupId = "pedidos-consumer-group",
                 BootstrapServers = KafkaHost,
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 EnableAutoCommit = false
