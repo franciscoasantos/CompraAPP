@@ -42,7 +42,12 @@ namespace API.Controllers
         [Authorize]
         public async Task<IActionResult> Post([FromBody] Pedido pedido)
         {
-            return Ok(await _pedidoService.CriarPedido(User.Identity.Name, pedido));
+            var retornoPedido = await _pedidoService.CriarPedido(User.Identity.Name, pedido);
+            
+            if (retornoPedido.Sucesso)
+                return Ok(retornoPedido);
+            else
+                return UnprocessableEntity(retornoPedido);
         }
     }
 }
