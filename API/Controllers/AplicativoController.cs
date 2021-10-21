@@ -19,6 +19,11 @@ namespace API.Controllers
             _aplicativoService = aplicativoService;
         }
 
+        /// <summary>
+        /// Lista os aplicativos para compra.
+        /// </summary>
+        /// <returns>Lista de aplicativos disponiveis</returns>
+        /// <response code="200">Lista de aplicativos disponiveis</response>
         [HttpGet]
         [Authorize]
         public async Task<IEnumerable<Aplicativo>> Get()
