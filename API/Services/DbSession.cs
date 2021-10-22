@@ -12,7 +12,16 @@ namespace API.Services
 
         public DbSession(IConfiguration configuration)
         {
-            Connection = new SqlConnection(configuration.GetSection("Configuracoes:stringConexao").Value);
+            var DbServer = Environment.GetEnvironmentVariable("DbServer");
+            var DbUser = Environment.GetEnvironmentVariable("DbUser");
+            var Password = Environment.GetEnvironmentVariable("Password");
+            var Database = Environment.GetEnvironmentVariable("Database");
+            
+            if (DbServer == null)
+                Connection = new SqlConnection(configuration.GetSection("Configuracoes:stringConexao").Value);
+            else
+                Connection = new SqlConnection($"Server={DbServer};Database={Database};User Id={DbUser};Password={Password};");
+            
             Connection.Open();
         }
 

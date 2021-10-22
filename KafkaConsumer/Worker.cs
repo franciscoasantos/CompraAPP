@@ -28,8 +28,16 @@ namespace KafkaConsumer
 
         private void RecuperarConfig()
         {
-            KafkaHost = _config.GetSection("Configuracoes:kafkaHost").Value;
-            KafkaTopic = _config.GetSection("Configuracoes:kafkaTopic").Value;
+            if (Environment.GetEnvironmentVariable("KafkaHost") == null)
+            {
+                KafkaHost = _config.GetSection("Configuracoes:kafkaHost").Value;
+                KafkaTopic = _config.GetSection("Configuracoes:kafkaTopic").Value;
+            }
+            else
+            {
+                KafkaHost = Environment.GetEnvironmentVariable("KafkaHost");
+                KafkaTopic = Environment.GetEnvironmentVariable("KafkaTopic");
+            }
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

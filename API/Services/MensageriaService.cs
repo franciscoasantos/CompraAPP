@@ -23,8 +23,19 @@ namespace API.Services
         {
             try
             {
-                var kafkaHost = _config.GetSection("Configuracoes:kafkaHost").Value;
-                var kafkaTopic = _config.GetSection("Configuracoes:kafkaTopic").Value;
+                string kafkaHost = string.Empty;
+                string kafkaTopic = string.Empty;
+
+                if (Environment.GetEnvironmentVariable("KafkaHost") == null)
+                {
+                    kafkaHost = _config.GetSection("Configuracoes:kafkaHost").Value;
+                    kafkaTopic = _config.GetSection("Configuracoes:kafkaTopic").Value;
+                }
+                else
+                {
+                    kafkaHost = Environment.GetEnvironmentVariable("KafkaHost");
+                    kafkaTopic = Environment.GetEnvironmentVariable("KafkaTopic");
+                }
 
                 if (kafkaHost == null || kafkaTopic == null)
                     throw new MensageriaException("As keys kafkaHost e/ou kafkaTopic não foram configuradas corretamente no appsettings.json.");

@@ -21,7 +21,11 @@ namespace API.Services
             _logger = logger;
             _cache = memoryCache;
             _aplicativoRepository = aplicativoRepository;
-            cacheExpiration = Convert.ToInt64(config.GetSection("Configuracoes:cacheExpirationEmSegundos").Value);
+
+            if (Environment.GetEnvironmentVariable("cacheExpirationEmSegundos") == null)
+                cacheExpiration = Convert.ToInt64(config.GetSection("Configuracoes:cacheExpirationEmSegundos").Value);
+            else
+                cacheExpiration = Convert.ToInt64(Environment.GetEnvironmentVariable("cacheExpirationEmSegundos"));
         }
         public async Task<IEnumerable<Aplicativo>> Get()
         {
