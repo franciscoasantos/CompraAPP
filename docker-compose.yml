@@ -1,0 +1,105 @@
+version: '2'
+services:
+  db:
+    build:
+      context: .
+      dockerfile: db.dockerfile
+    networks: 
+      - net
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "EFwt0PkuqbstVH"
+      MSSQL_PID: Express
+    ports:
+      - "1433:1433"
+            
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    networks: 
+      - net
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+  
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    networks: 
+      - net
+    depends_on:
+      - zookeeper
+      - db
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    
+  init-kafka:
+    image: confluentinc/cp-kafka:latest
+    networks: 
+      - net
+    depends_on:
+      - kafka
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      sleep 15
+      kafka-topics -zookeeper zookeeper:2181 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics -zookeeper zookeeper:2181 --create --if-not-exists --topic pedidos-topic --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics -zookeeper zookeeper:2181 --list
+      "
+      
+  consumer:
+    build:
+      context: .
+      dockerfile: consumer.dockerfile
+    networks: 
+      - net
+    environment:
+      DbServer: "db"
+      DbPort: "1433"
+      DbUser: "compraapp"
+      Password: "compraapp123"
+      Database: "CompraApp"
+      KafkaHost: "kafka:29092"
+      KafkaTopic: "pedidos-topic"
+    depends_on:
+      - db
+      - kafka
+      
+  api:
+    build:
+      context: .
+      dockerfile: api.dockerfile
+    networks: 
+      - net
+    environment:
+      DbServer: "db"
+      DbPort: "1433"
+      DbUser: "compraapp"
+      Password: "compraapp123"
+      Database: "CompraApp"
+      cacheExpirationEmSegundos: "30"
+      KafkaHost: "kafka:29092"
+      KafkaTopic: "pedidos-topic"
+    ports: 
+      - "5000:80"
+    depends_on:
+      - db
+      - kafka
+
+networks: 
+  net:
+    driver: bridge
