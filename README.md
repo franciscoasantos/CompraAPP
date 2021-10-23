@@ -7,4 +7,4 @@ CompraApp requer [Docker](https://www.docker.com/) para rodar.
 docker-compose up --build
 ```
 - Aguardar inicio dos containers;
-- A API será hospedada no endereço: http://localhost:5000
+- A API será hospedada no endereço: http://localhost:5000/swagger
