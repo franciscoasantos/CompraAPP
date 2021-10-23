@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -74,6 +73,7 @@ namespace API
             services.AddScoped<IPedidoService, PedidoService>();
             services.AddScoped<IMensageriaRepository, MensageriaRepository>();
             services.AddScoped<IMensageriaService, MensageriaService>();
+            services.AddScoped<ICartaoService, CartaoService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,14 +11,14 @@ namespace API.Services
     {
         private readonly ILogger<PedidoService> _logger;
         private readonly IMensageriaService _mensageriaService;
-        private readonly ICriptografiaService _criptografiaService;
+        private readonly ICartaoService _cartaoService;
         private readonly IUsuarioRepository _usuarioRepository;
 
-        public PedidoService(ILogger<PedidoService> logger, IMensageriaService mensageriaService, ICriptografiaService criptografiaService, IUsuarioRepository usuarioRepository)
+        public PedidoService(ILogger<PedidoService> logger, IMensageriaService mensageriaService, ICartaoService cartaoService, IUsuarioRepository usuarioRepository)
         {
             _logger = logger;
             _mensageriaService = mensageriaService;
-            _criptografiaService = criptografiaService;
+            _cartaoService = cartaoService;
             _usuarioRepository = usuarioRepository;
         }
 
@@ -26,21 +26,17 @@ namespace API.Services
         {
             try
             {
-                if (!await CartaoEhValido(pedido.Cartao))
+                if (!_cartaoService.CartaoEhValido(pedido.Cartao))
                     return new PedidoResponse { Sucesso = false, Detalhe = "O cartão informado não é válido." };
 
                 var idUsuario = await _usuarioRepository.BuscarIdUsuario(user);
-
-                pedido.Cartao.Numero = _criptografiaService.Criptografar(pedido.Cartao.Numero);
-                pedido.Cartao.Vencimento = _criptografiaService.Criptografar(pedido.Cartao.Vencimento);
-                pedido.Cartao.CodigoSeguranca = _criptografiaService.Criptografar(pedido.Cartao.CodigoSeguranca);
 
                 PedidoMensagem pedidoMensagem = new()
                 {
                     IdUsuario = idUsuario,
                     IdAplicativo = pedido.IdAplicativo,
                     SalvarCartao = pedido.SalvarCartao,
-                    Cartao = pedido.Cartao
+                    Cartao = _cartaoService.CriptografarDadosCartao(pedido.Cartao)
                 };
 
                 await _mensageriaService.ProcessarPedido(pedidoMensagem);
@@ -55,14 +51,6 @@ namespace API.Services
                     Detalhe = ex.Message
                 };
             }
-        }
-        public async Task<bool> CartaoEhValido(Cartao cartao)
-        {
-            if (cartao.Numero.Length == 16)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }
