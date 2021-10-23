@@ -14,7 +14,7 @@ namespace API.Repositories
         {
             _sessao = sessao;
         }
-        public async Task<IEnumerable<Login>> BuscarDadosLogin(Login login)
+        public async Task<Login> BuscarDadosLogin(Login login)
         {
             string query = @"SELECT cpf Cpf                                  
                                  ,senha Senha                                
@@ -25,7 +25,7 @@ namespace API.Repositories
             var template = new { Cpf = login.Usuario };
             var parameters = new DynamicParameters(template);
 
-            return await _sessao.Connection.QueryAsync<Login>(query, parameters);
+            return await _sessao.Connection.QueryFirstOrDefaultAsync<Login>(query, parameters);
         }
     }
 }

@@ -27,11 +27,11 @@ namespace API.Services
         {
             try
             {
-                var retorno = await _loginRepository.BuscarDadosLogin(login);
+                var cadastro = await _loginRepository.BuscarDadosLogin(login);
 
-                if (retorno.Any())
+                if (cadastro != null)
                 {
-                    if (_criptografiaService.Criptografar(login.Senha) != retorno.FirstOrDefault().Senha)
+                    if (!SenhaValida(login.Senha, cadastro.Senha))
                         return new LoginResponse { Logado = false, Detalhe = "Usuário ou senha inválidos!" };
                 }
                 else
@@ -46,6 +46,11 @@ namespace API.Services
                 _logger.LogError(ex, ex.Message);
                 return new LoginResponse { Logado = false, Detalhe = ex.Message };
             }
+        }
+
+        private bool SenhaValida(string senhaInformada, string senhaCadastrada)
+        {
+            return _criptografiaService.Criptografar(senhaInformada) == senhaCadastrada;
         }
     }
 }

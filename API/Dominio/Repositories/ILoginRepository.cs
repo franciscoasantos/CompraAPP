@@ -6,6 +6,6 @@ namespace API.Dominio.Repositories
 {
     public interface ILoginRepository
     {
-        Task<IEnumerable<Login>> BuscarDadosLogin(Login login);
+        Task<Login> BuscarDadosLogin(Login login);
     }
 }
