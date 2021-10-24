@@ -1,7 +1,7 @@
 # CompraAPP
 ### Como executar o projeto
-CompraApp requer [Docker](https://www.docker.com/) para rodar.
-- Clonar o repositório;
+CompraApp requer [Docker](https://www.docker.com/) para rodar (Ambiente Linux).
+- Clonar o repositório (Para funcionamento correto dos scripts, desativar a configuração autoCrLf do git antes da clonagem: git config --global core.autocrlf false);
 - No diretório raíz do projeto, executar o comando:
 ```sh
 docker-compose up --build
